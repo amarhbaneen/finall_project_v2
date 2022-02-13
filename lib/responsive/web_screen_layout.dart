@@ -1,3 +1,4 @@
+import 'package:finall_project_v2/Screens/general/login.dart';
 import 'package:flutter/material.dart';
 
 class WebScreenLayout extends StatelessWidget {
@@ -7,7 +8,7 @@ class WebScreenLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('this is web Version'),
+        child: LogIn(),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:finall_project_v2/Screens/general/login.dart';
 import 'package:flutter/material.dart';
 
 class MobileScreenLayout extends StatelessWidget {
@@ -7,7 +8,7 @@ class MobileScreenLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('this is mobile  Version'),
+        child: LogIn(),
       ),
     );
   }
