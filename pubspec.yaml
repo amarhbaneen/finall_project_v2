@@ -38,6 +38,11 @@ dependencies:
   cloud_firestore: ^3.1.8
   firebase_auth: ^3.3.7
   firebase_storage: ^10.2.7
+  simple_animations: ^4.0.1
+  google_fonts: ^2.3.1
+  font_awesome_flutter: ^9.2.0
+  animated_text_kit: ^4.2.1
+  fluttertoast: ^8.0.8
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +71,7 @@ flutter:
      - Assets/thisisengineering-raeng-ovWUKV1btXk-unsplash.jpg
      - Assets/simone-hutsch-jwIBqRGLb6I-unsplash.jpg
      - Assets/photo-1554224154-22dec7ec8818.jpeg
+     - assets/images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

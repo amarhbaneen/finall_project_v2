@@ -1,108 +1,263 @@
+import 'package:finall_project_v2/Screens/employee/employeeScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class LogIn extends StatelessWidget {
+
+class LogIn extends StatefulWidget {
+  @override
+  _LogInState createState() => _LogInState();
+}
+
+class _LogInState extends State<LogIn> {
+  final TextEditingController passwordController = new TextEditingController();
+  final TextEditingController emailController = new TextEditingController();
+  final _auth = FirebaseAuth.instance;
+  bool rememberpwd = false;
+  bool sec = true;
+  var visable = Icon(
+    Icons.visibility,
+    color: Color(0xff4c5166),
+  );
+  var visableoff = Icon(
+    Icons.visibility_off,
+    color: Color(0xff4c5166),
+  );
+
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('Assets/thisisengineering-raeng-ovWUKV1btXk-unsplash.jpg'),
-                  fit: BoxFit.fitWidth,
-                  alignment: Alignment.topCenter
-              )
+    return Scaffold(
+      body: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.light,
+        child: GestureDetector(
+          child: Stack(
+            children: [
+              Container(
+                height: double.infinity,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.blue,
+                      Colors.lightBlue,
+                      Colors.blueGrey
+                    ],
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 20, left: 20),
+                  child: SingleChildScrollView(
+                    child: Column(
+
+                      children: [
+                        SizedBox(
+                          height: 100,
+                        ),
+                        Text(
+                          "Welcome Back! 🎈",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+
+
+                          ),
+                        ),
+                        SizedBox(
+                          height: 100,
+                        ),
+                        buildEmail(),
+                        SizedBox(
+                          height: 50,
+                        ),
+                        buildPassword(),
+                        buildLoginButton(),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+
+                            buildGoogle(),
+                            buildFacebook(),
+
+                          ],
+                        ),
+                        SizedBox(
+                          height: 80,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget buildEmail() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Email",
+          style: TextStyle(
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+          height: 10,
+        ),
         Container(
-          width: MediaQuery.of(context).size.width,
-          margin: EdgeInsets.only(top: 250),
+          height: 60,
+          alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                 color: Colors.white,
-
-            ),
-          child: Padding(
-            padding: EdgeInsets.all(23),
-            child: ListView(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                  child: Container(
-                    color: Color(0xfff5f5f5),
-                    child: TextFormField(
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'SFUIDisplay'
-                      ),
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Username',
-                          prefixIcon: Icon(Icons.person_outline),
-                          labelStyle: TextStyle(
-                              fontSize: 15
-                          )
-                      ),
-                    ),
-                  ),
+              color: Color(0xffebefff),
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  offset: Offset(0, 2),
+                )
+              ]),
+          child: TextFormField(
+            controller: emailController,
+            onSaved: (value) {
+              emailController.text = value!;
+            },
+            keyboardType: TextInputType.emailAddress,
+            style: TextStyle(color: Colors.black),
+            decoration: InputDecoration(
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.only(top: 14),
+                prefixIcon: Icon(
+                  Icons.email,
+                  color: Color(0xff4c5166),
                 ),
-                Container(
-                  color: Color(0xfff5f5f5),
-                  child: TextFormField(
-                    obscureText: true,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontFamily: 'SFUIDisplay'
-                    ),
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Password',
-                        prefixIcon: Icon(Icons.lock_outline),
-                        labelStyle: TextStyle(
-                            fontSize: 15
-                        )
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
-                  child: MaterialButton(
-                    onPressed: (){},//since this is only a UI app
-                    child: Text('SIGN IN',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: 'SFUIDisplay',
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    color: Color(0xffff2d55),
-                    elevation: 0,
-                    minWidth: 400,
-                    height: 50,
-                    textColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
-                  child: Center(
-                    child: Text('Forgot your password?',
-                      style: TextStyle(
-                          fontFamily: 'SFUIDisplay',
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold
-                      ),
-                    ),
-                  ),
-                ),
-
-              ],
-            ),
+                hintText: 'Email',
+                hintStyle: TextStyle(color: Colors.black38)),
           ),
-        )
+        ),
       ],
     );
+  }
+
+  Widget buildPassword() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Password",
+          style: TextStyle(
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Container(
+          height: 60,
+          alignment: Alignment.centerLeft,
+          decoration: BoxDecoration(
+              color: Color(0xffebefff),
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  offset: Offset(0, 2),
+                )
+              ]),
+          child: TextFormField(
+            controller: passwordController,
+            onSaved: (value) {
+              passwordController.text = value!;
+            },
+            obscureText: true,
+            enableSuggestions: false,
+            autocorrect: false,
+            keyboardType: TextInputType.visiblePassword,
+            style: TextStyle(color: Colors.black),
+            decoration: InputDecoration(
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.only(top: 14),
+                prefixIcon: Icon(
+                  Icons.password,
+                  color: Color(0xff4c5166),
+                ),
+                hintText: 'Password',
+                hintStyle: TextStyle(color: Colors.black38)),
+          ),
+        ),
+      ],
+    );
+  }
+
+
+  Widget buildLoginButton() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 25),
+      child: Container(
+        width: double.infinity,
+        child: RaisedButton(
+          onPressed: () {
+            login(emailController.text, passwordController.text);
+          },
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          color: Colors.black,
+          padding: EdgeInsets.all(30),
+          child: Text(
+            "Login",
+            style: TextStyle(
+                fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+    );
+  }
+
+
+  Widget buildGoogle() {
+    return Container(
+      height: 50,
+      width: 50,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: new Image.asset("Assets/images/google.png"),
+    );
+  }
+
+  Widget buildFacebook() {
+    return Container(
+      height: 50,
+      width: 50,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: new Image.asset("Assets/images/facebook.png"),
+    );
+  }
+
+  void login(String email, String password) async
+  {
+    await _auth.signInWithEmailAndPassword(email: email, password: password)
+        .then((uid) =>
+    {
+      Fluttertoast.showToast(msg: "LogIn Successes"),
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => employee()))
+    }).catchError((e) {
+      Fluttertoast.showToast(msg: e.message);
+    });
   }
 }
