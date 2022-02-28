@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finall_project_v2/Screens/employee/employeeScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +13,10 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
+  final CollectionReference _userCollection =
+  FirebaseFirestore.instance.collection('users');
+  String _userType = 'a';
+  bool _isloading = false;
   final TextEditingController passwordController = new TextEditingController();
   final TextEditingController emailController = new TextEditingController();
   final _auth = FirebaseAuth.instance;
@@ -37,17 +42,6 @@ class _LogInState extends State<LogIn> {
               Container(
                 height: double.infinity,
                 width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.blue,
-                      Colors.lightBlue,
-                      Colors.blueGrey
-                    ],
-                  ),
-                ),
                 child: Padding(
                   padding: const EdgeInsets.only(right: 20, left: 20),
                   child: SingleChildScrollView(
@@ -64,8 +58,6 @@ class _LogInState extends State<LogIn> {
                             color: Colors.black,
                             fontSize: 40,
                             fontWeight: FontWeight.bold,
-
-
                           ),
                         ),
                         SizedBox(
@@ -75,10 +67,17 @@ class _LogInState extends State<LogIn> {
                         SizedBox(
                           height: 50,
                         ),
+
                         buildPassword(),
-                        buildLoginButton(),
                         SizedBox(
-                          height: 30,
+                          height: 50,
+                        ),
+                        if(_isloading)
+                          CircularProgressIndicator(),
+                        if(!_isloading)
+                          buildLoginButton(),
+                        SizedBox(
+                          height: 50,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -250,14 +249,31 @@ class _LogInState extends State<LogIn> {
 
   void login(String email, String password) async
   {
-    await _auth.signInWithEmailAndPassword(email: email, password: password)
-        .then((uid) =>
-    {
-      Fluttertoast.showToast(msg: "LogIn Successes"),
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => employee()))
-    }).catchError((e) {
-      Fluttertoast.showToast(msg: e.message);
+    setState(() {
+      _isloading = true;
     });
+
+      await _auth.signInWithEmailAndPassword(email: email, password: password)
+          .then((uid) async =>
+      {
+        _userType = (await _userCollection.doc(FirebaseAuth.instance.currentUser?.uid).get())['type'],
+        if (_userType == 'employee')
+        {
+          Fluttertoast.showToast(msg: "LogIn Successes"),
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => employee()))
+        }
+        else
+          {
+            throw const FormatException('User type isnt allowed')
+          }
+      }).catchError((e) {
+        Fluttertoast.showToast(msg: e.message);
+        setState(() {
+          _isloading = false;
+        });
+      });
+    }
   }
-}
+
+
