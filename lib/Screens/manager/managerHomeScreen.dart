@@ -1,32 +1,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finall_project_v2/Screens/employee/sidedrawer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import '../general/login.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:ionicons/ionicons.dart';
 
-class employeeHomePage extends StatefulWidget {
+
+class managerHomeScreen extends StatefulWidget {
+  const managerHomeScreen({Key? key}) : super(key: key);
+
   @override
-  _employeeHomePageState createState() => _employeeHomePageState();
+  _managerHomeScreenState createState() => _managerHomeScreenState();
 }
 
-class _employeeHomePageState extends State<employeeHomePage> {
+class _managerHomeScreenState extends State<managerHomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  String widgetName = 'employee';
   final CollectionReference _userCollection =
   FirebaseFirestore.instance.collection('users');
+  String widgetName = 'employee';
   String _username = '' ;
-  String _type = '' ;
-  Future<String?> _getdata() async{
+  String _type = '';
+  Future <void> _getdata()
+  async {
     final user = await _userCollection.doc(FirebaseAuth.instance.currentUser?.uid).get();
     setState(() {
       _username = user['username'];
       _type = user['type'];
-    });}
+    });
+  }
   @override
-  initState() {
+  void initState() {
     super.initState();
     _getdata();
   }
@@ -56,7 +60,7 @@ class _employeeHomePageState extends State<employeeHomePage> {
                   color: Colors.transparent,
                 ),
                 Text(
-                  'Home',
+                  'Manager Home ',
                   style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.w500,
@@ -82,7 +86,7 @@ class _employeeHomePageState extends State<employeeHomePage> {
         ),
         preferredSize: Size(MediaQuery.of(context).size.width, 150.0),
       ),
-      body:Column(
+      body: Column(
         children: [
           Container(
             child: ListTile(
@@ -90,15 +94,13 @@ class _employeeHomePageState extends State<employeeHomePage> {
               title: Text("welcome back $_username "),
               subtitle: Text("$_type"),
               trailing: Icon(Icons.monitor_heart_outlined),
-                shape: RoundedRectangleBorder(side: BorderSide(color: Colors.black, width: 3),
-                    borderRadius: BorderRadius.circular(20)),
-                tileColor: Colors.blue.withAlpha(30),
+              shape: RoundedRectangleBorder(side: BorderSide(color: Colors.black, width: 3),
+                  borderRadius: BorderRadius.circular(20)),
+              tileColor: Colors.blue.withAlpha(30),
             ),
           ),
           Expanded(
-
-
-          child: GridView.count( crossAxisCount: 2, children:[
+              child: GridView.count(crossAxisCount: 2 ,  children: [
                 GridTile(
                   child: Card(
                     color: Colors.transparent,
@@ -120,7 +122,7 @@ class _employeeHomePageState extends State<employeeHomePage> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 Icon(
-                                  Icons.event,
+                                  EvaIcons.calendar,
                                   size: 60.0,
                                 ),
                                 Text("Week Schedule")
@@ -134,35 +136,35 @@ class _employeeHomePageState extends State<employeeHomePage> {
                 ),
                 GridTile(
                   child: Card(
-                color: Colors.transparent,
-                child: InkWell(
-                  splashColor: Colors.blue.withAlpha(30),
-                  onTap: () {
-                    // Navigator.push//
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white)),
-                    width: 250,
-                    height: 75,
-                    child: Center(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      splashColor: Colors.blue.withAlpha(30),
+                      onTap: () {
+                        // Navigator.push//
+                      },
                       child: Container(
-                        color: Colors.transparent,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(
-                              Icons.payments_outlined,
-                              size: 60.0,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.white)),
+                        width: 250,
+                        height: 75,
+                        child: Center(
+                          child: Container(
+                            color: Colors.transparent,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(
+                                  EvaIcons.peopleOutline,
+                                  size: 60.0,
+                                ),
+                                Text("employee List")
+                              ],
                             ),
-                            Text("Pay Check")
-                          ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
                   ),
                 ),
                 GridTile(
@@ -186,10 +188,10 @@ class _employeeHomePageState extends State<employeeHomePage> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 Icon(
-                                  Icons.report_gmailerrorred,
+                                  Ionicons.newspaper_outline,
                                   size: 60.0,
                                 ),
-                                Text("Report")
+                                Text("Pay Check")
                               ],
                             ),
                           ),
@@ -198,44 +200,10 @@ class _employeeHomePageState extends State<employeeHomePage> {
                     ),
                   ),
                 ),
-                GridTile(
-                  child: Card(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      splashColor: Colors.blue.withAlpha(30),
-                      onTap: () {
-                        FirebaseAuth.instance.signOut();
-                        Fluttertoast.showToast(msg: "Logged Out");
-                        Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: (context) => LogIn()));
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white)),
-                        width: 250,
-                        height: 75,
-                        child: Center(
-                          child: Container(
-                            color: Colors.transparent,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.exit_to_app,
-                                  size: 60.0,
-                                ),
-                                Text("logout")
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-          ])
-          )]),
-        );
+              ],)
+          )
+        ],
+      ),
+    );
   }
 }

@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:finall_project_v2/Screens/employee/employeeScreen.dart';
+import 'package:finall_project_v2/Screens/employee/employeeHomeScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import '../manager/managerHomeScreen.dart';
 
 
 class LogIn extends StatefulWidget {
@@ -257,15 +259,25 @@ class _LogInState extends State<LogIn> {
           .then((uid) async =>
       {
         _userType = (await _userCollection.doc(FirebaseAuth.instance.currentUser?.uid).get())['type'],
+
         if (_userType == 'employee')
         {
           Fluttertoast.showToast(msg: "LogIn Successes"),
           Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => employee()))
+              MaterialPageRoute(builder: (context) => employeeHomePage()))
         }
         else
           {
-            throw const FormatException('User type isnt allowed')
+            if(_userType == 'manager')
+              {
+                Fluttertoast.showToast(msg: "LogIn Successes"),
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => managerHomeScreen()))
+              }
+            else
+              {
+                throw const FormatException('User type isnt allowed')
+              }
           }
       }).catchError((e) {
         Fluttertoast.showToast(msg: e.message);

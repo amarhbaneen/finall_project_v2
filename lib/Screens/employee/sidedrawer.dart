@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:finall_project_v2/Screens/employee/employeeHomeScreen.dart';
 import 'package:finall_project_v2/Screens/general/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'employeeScreen.dart';
 
 class SideDrawer  extends StatefulWidget {
   @override
@@ -16,7 +16,7 @@ class _SideDrawerState extends State<SideDrawer> {
   String? currentemail = FirebaseAuth.instance.currentUser?.email;
   final CollectionReference _userCollection =
   FirebaseFirestore.instance.collection('users');
-  String? _username =  '';
+  String _username =  '';
   Future<String?> _getdata() async{
     final user = await _userCollection.doc(FirebaseAuth.instance.currentUser?.uid).get();
     setState(() {
@@ -58,7 +58,7 @@ class _SideDrawerState extends State<SideDrawer> {
                 title: Text('Home'),
                 onTap: () {
                   Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => employee()));
+                      MaterialPageRoute(builder: (context) => employeeHomePage()));
                 },
               ),
               ListTile(
