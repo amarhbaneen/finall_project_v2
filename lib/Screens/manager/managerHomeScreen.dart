@@ -3,9 +3,10 @@ import 'package:finall_project_v2/Screens/employee/sidedrawer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ionicons/ionicons.dart';
 
+import '../general/login.dart';
 
 class managerHomeScreen extends StatefulWidget {
   const managerHomeScreen({Key? key}) : super(key: key);
@@ -17,18 +18,21 @@ class managerHomeScreen extends StatefulWidget {
 class _managerHomeScreenState extends State<managerHomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final CollectionReference _userCollection =
-  FirebaseFirestore.instance.collection('users');
+      FirebaseFirestore.instance.collection('users');
   String widgetName = 'employee';
-  String _username = '' ;
+  String _firstname = '';
+
   String _type = '';
-  Future <void> _getdata()
-  async {
-    final user = await _userCollection.doc(FirebaseAuth.instance.currentUser?.uid).get();
+
+  Future<void> _getdata() async {
+    final user =
+        await _userCollection.doc(FirebaseAuth.instance.currentUser?.uid).get();
     setState(() {
-      _username = user['username'];
+      _firstname = user['firstname'];
       _type = user['type'];
     });
   }
+
   @override
   void initState() {
     super.initState();
@@ -51,11 +55,7 @@ class _managerHomeScreenState extends State<managerHomeScreen> {
                   onPressed: () {
                     _scaffoldKey.currentState?.openDrawer();
                   },
-                  child: Icon(
-                    Icons.list,
-                    color: Colors.white,
-                    size: 35.0,
-                  ),
+                  child: Icon(Ionicons.menu_sharp),
                   elevation: 0,
                   color: Colors.transparent,
                 ),
@@ -89,119 +89,144 @@ class _managerHomeScreenState extends State<managerHomeScreen> {
       body: Column(
         children: [
           Container(
-            child: ListTile(
-              leading: Icon(Icons.account_circle),
-              title: Text("welcome back $_username "),
-              subtitle: Text("$_type"),
-              trailing: Icon(Icons.monitor_heart_outlined),
-              shape: RoundedRectangleBorder(side: BorderSide(color: Colors.black, width: 3),
-                  borderRadius: BorderRadius.circular(20)),
-              tileColor: Colors.blue.withAlpha(30),
+            child: Card(
+              elevation: 5,
+              child: ListTile(
+                leading: Icon(Ionicons.person, size: 40),
+                title: Text(
+                  "welcome back $_firstname ",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text("$_type",
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
             ),
           ),
+          SizedBox(
+            height: 10,
+          ),
           Expanded(
-              child: GridView.count(crossAxisCount: 2 ,  children: [
-                GridTile(
-                  child: Card(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      splashColor: Colors.blue.withAlpha(30),
-                      onTap: () {
-                        // Navigator.push//
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white)),
-                        width: 250,
-                        height: 75,
-                        child: Center(
-                          child: Container(
-                            color: Colors.transparent,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  EvaIcons.calendar,
-                                  size: 60.0,
-                                ),
-                                Text("Week Schedule")
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+              child: GridView.count(
+            crossAxisCount: 2,
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                child: InkWell(
+                    onTap: () {},
+                    child: Center(
+                        child: Text('Week Schedule',
+                            style: TextStyle(
+                                height: 10,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                backgroundColor: Colors.white)))),
+                height: 190.0,
+                width: MediaQuery.of(context).size.width - 100.0,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(80),
+                    color: Colors.blue,
+                    image: DecorationImage(
+                        image: AssetImage('Assets/images/Header-1024x801.png'),
+                        fit: BoxFit.fill)),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                child: InkWell(
+                    onTap: () {},
+                    child: Center(
+                        child: Text('Employee List',
+                            style: TextStyle(
+                                height: 10,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                backgroundColor: Colors.white)))),
+                height: 190.0,
+                width: MediaQuery.of(context).size.width - 100.0,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(80),
+                    color: Colors.blue,
+                    image: DecorationImage(
+                        image: AssetImage(
+                            'Assets/images/iStock_000012204568_Large.jpg'),
+                        fit: BoxFit.fill)),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                child: InkWell(
+                    onTap: () {},
+                    child: Center(
+                        child: Text('Pay Check',
+                            style: TextStyle(
+                                height: 10,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                backgroundColor: Colors.white)))),
+                height: 190.0,
+                width: MediaQuery.of(context).size.width - 100.0,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(80),
+                    color: Colors.blue,
+                    image: DecorationImage(
+                        image: AssetImage('Assets/images/paycheck.jpg'),
+                        fit: BoxFit.fill)),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                child: InkWell(
+                    onTap: () {},
+                    child: Center(
+                        child: Text('Report a problem',
+                            style: TextStyle(
+                                height: 10,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                backgroundColor: Colors.white)))),
+                height: 190.0,
+                width: MediaQuery.of(context).size.width - 100.0,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(80),
+                    color: Colors.blue,
+                    image: DecorationImage(
+                        image: AssetImage('Assets/images/phan-biet-problem-va-trouble.jpg'),
+                        fit: BoxFit.fill)),
+              ),
+            ],
+          )),
+          RaisedButton(
+            color: Colors.red,
+            padding: EdgeInsets.all(10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(1),
+                  child: Icon(
+                    Ionicons.log_out_outline,
+                    color: Colors.white,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(1),
+                  child: Text(
+                    "                Log Out                  ",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                GridTile(
-                  child: Card(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      splashColor: Colors.blue.withAlpha(30),
-                      onTap: () {
-                        // Navigator.push//
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white)),
-                        width: 250,
-                        height: 75,
-                        child: Center(
-                          child: Container(
-                            color: Colors.transparent,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  EvaIcons.peopleOutline,
-                                  size: 60.0,
-                                ),
-                                Text("employee List")
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                GridTile(
-                  child: Card(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      splashColor: Colors.blue.withAlpha(30),
-                      onTap: () {
-                        // Navigator.push//
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white)),
-                        width: 250,
-                        height: 75,
-                        child: Center(
-                          child: Container(
-                            color: Colors.transparent,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  Ionicons.newspaper_outline,
-                                  size: 60.0,
-                                ),
-                                Text("Pay Check")
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],)
-          )
+              ],
+            ),
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+              Fluttertoast.showToast(msg: "Logged Out");
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => LogIn()));
+            },
+          ),
+          SizedBox(
+            height: 20,
+          ),
         ],
       ),
     );
