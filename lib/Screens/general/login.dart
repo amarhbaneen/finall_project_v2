@@ -42,6 +42,13 @@ class _LogInState extends State<LogIn> {
           child: Stack(
             children: [
               Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image:
+                        NetworkImage('https://media.idownloadblog.com/wp-content/uploads/2021/01/abstract-wallpaper-for-iphone-by-WALLSBYJFL-idownloadblog-touchid.jpg'),
+                        fit: BoxFit.cover
+                    )
+                ),
                 height: double.infinity,
                 width: double.infinity,
                 child: Padding(
@@ -57,7 +64,7 @@ class _LogInState extends State<LogIn> {
                           "Welcome Back! 🎈",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Colors.white,
                             fontSize: 40,
                             fontWeight: FontWeight.bold,
                           ),
@@ -112,7 +119,7 @@ class _LogInState extends State<LogIn> {
         Text(
           "Email",
           style: TextStyle(
-              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+              color: Color(0xffebefff), fontSize: 16, fontWeight: FontWeight.bold),
         ),
         SizedBox(
           height: 10,
@@ -121,11 +128,11 @@ class _LogInState extends State<LogIn> {
           height: 60,
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
-              color: Color(0xffebefff),
+              color: Colors.transparent,
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black26,
+                  color: Color(0xffebefff),
                   offset: Offset(0, 2),
                 )
               ]),
@@ -158,7 +165,7 @@ class _LogInState extends State<LogIn> {
         Text(
           "Password",
           style: TextStyle(
-              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+              color:Color(0xffebefff), fontSize: 16, fontWeight: FontWeight.bold),
         ),
         SizedBox(
           height: 10,
@@ -167,11 +174,11 @@ class _LogInState extends State<LogIn> {
           height: 60,
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
-              color: Color(0xffebefff),
+              color: Colors.transparent,
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black26,
+                  color: Color(0xffebefff),
                   offset: Offset(0, 2),
                 )
               ]),
@@ -214,12 +221,12 @@ class _LogInState extends State<LogIn> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
-          color: Colors.black,
-          padding: EdgeInsets.all(30),
+          color: Color(0xffebefff),
+          padding: EdgeInsets.all(20),
           child: Text(
             "Login",
             style: TextStyle(
-                fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),
+                fontSize: 20, color: Colors.black45),
           ),
         ),
       ),

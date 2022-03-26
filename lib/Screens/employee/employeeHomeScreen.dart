@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ionicons/ionicons.dart';
 import '../general/login.dart';
 
 class employeeHomePage extends StatefulWidget {
@@ -17,13 +18,15 @@ class _employeeHomePageState extends State<employeeHomePage> {
   String widgetName = 'employee';
   final CollectionReference _userCollection =
   FirebaseFirestore.instance.collection('users');
-  String _username = '' ;
+  String _firstname = '' ;
+  String _lastname = '';
   String _type = '' ;
   Future<String?> _getdata() async{
     final user = await _userCollection.doc(FirebaseAuth.instance.currentUser?.uid).get();
     setState(() {
-      _username = user['username'];
+      _firstname = user['firstname'];
       _type = user['type'];
+      _lastname = user['lastname'];
     });}
   @override
   initState() {
@@ -84,158 +87,176 @@ class _employeeHomePageState extends State<employeeHomePage> {
       ),
       body:Column(
         children: [
-          Container(
-            child: ListTile(
-              leading: Icon(Icons.account_circle),
-              title: Text("welcome back $_username "),
-              subtitle: Text("$_type"),
-              trailing: Icon(Icons.monitor_heart_outlined),
-                shape: RoundedRectangleBorder(side: BorderSide(color: Colors.black, width: 3),
-                    borderRadius: BorderRadius.circular(20)),
-                tileColor: Colors.blue.withAlpha(30),
-            ),
-          ),
-          Expanded(
+          Expanded(child:ListView(
+            children: [
+              Container(
+                child: Card(
+                  elevation: 5,
+                  child: ListTile(
+                    leading: Icon(Ionicons.person, size: 40),
+                    title: Text(
+                      "$_firstname $_lastname ",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text("$_type",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: (){},
+                child: Container(
+                  width: double.infinity,
+                  height: 120,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage('https://images.unsplash.com/photo-1560420025-9453f02b4751?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=701&q=80'),
+                          fit: BoxFit.cover
+                      )
 
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'WeekSchedule',
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'view your weekly Schedule',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InkWell(
+                onTap: (){},
+                child: Container(
+                  width: double.infinity,
+                  height: 120,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image:
+                          NetworkImage('https://images.unsplash.com/photo-1600007283728-22abc97b9318?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80'),
+                          fit: BoxFit.cover
+                      )
+                  ),
 
-          child: GridView.count( crossAxisCount: 2, children:[
-                GridTile(
-                  child: Card(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      splashColor: Colors.blue.withAlpha(30),
-                      onTap: () {
-                        // Navigator.push//
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white)),
-                        width: 250,
-                        height: 75,
-                        child: Center(
-                          child: Container(
-                            color: Colors.transparent,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.event,
-                                  size: 60.0,
-                                ),
-                                Text("Week Schedule")
-                              ],
-                            ),
-                          ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'PayCheck',
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black
                         ),
                       ),
-                    ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'view Paycheck',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black
+                        ),
+                      )
+                    ],
                   ),
                 ),
-                GridTile(
-                  child: Card(
-                color: Colors.transparent,
-                child: InkWell(
-                  splashColor: Colors.blue.withAlpha(30),
-                  onTap: () {
-                    // Navigator.push//
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white)),
-                    width: 250,
-                    height: 75,
-                    child: Center(
-                      child: Container(
-                        color: Colors.transparent,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(
-                              Icons.payments_outlined,
-                              size: 60.0,
-                            ),
-                            Text("Pay Check")
-                          ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InkWell(
+                onTap: (){},
+                child: Container(
+                  width: double.infinity,
+                  height: 120,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image:
+                          NetworkImage('https://images.unsplash.com/photo-1633613286848-e6f43bbafb8d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80'),
+                          fit: BoxFit.cover
+                      )
+                  ),
+
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Problem?',
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black
                         ),
                       ),
-                    ),
-                  ),
-                ),
-                  ),
-                ),
-                GridTile(
-                  child: Card(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      splashColor: Colors.blue.withAlpha(30),
-                      onTap: () {
-                        // Navigator.push//
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white)),
-                        width: 250,
-                        height: 75,
-                        child: Center(
-                          child: Container(
-                            color: Colors.transparent,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.report_gmailerrorred,
-                                  size: 60.0,
-                                ),
-                                Text("Report")
-                              ],
-                            ),
-                          ),
-                        ),
+                      SizedBox(
+                        height: 5,
                       ),
-                    ),
-                  ),
-                ),
-                GridTile(
-                  child: Card(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      splashColor: Colors.blue.withAlpha(30),
-                      onTap: () {
-                        FirebaseAuth.instance.signOut();
-                        Fluttertoast.showToast(msg: "Logged Out");
-                        Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: (context) => LogIn()));
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white)),
-                        width: 250,
-                        height: 75,
-                        child: Center(
-                          child: Container(
-                            color: Colors.transparent,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.exit_to_app,
-                                  size: 60.0,
-                                ),
-                                Text("logout")
-                              ],
-                            ),
-                          ),
+                      Text(
+                        'report a problem ',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black
                         ),
-                      ),
-                    ),
+                      )
+                    ],
                   ),
                 ),
-          ])
-          )]),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InkWell(
+                onTap: (){
+                  FirebaseAuth.instance.signOut();
+                  Fluttertoast.showToast(msg: "Logged Out");
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => LogIn()));
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 120,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image:
+                          NetworkImage('https://images.unsplash.com/photo-1646085401455-f659a7220028?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80'),
+                          fit: BoxFit.cover
+                      )
+                  ),
+
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                    ],
+                  ),
+                ),
+              ),
+
+            ],
+          )),
+          ]),
         );
   }
 }

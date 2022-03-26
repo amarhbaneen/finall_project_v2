@@ -18,17 +18,19 @@ class managerHomeScreen extends StatefulWidget {
 class _managerHomeScreenState extends State<managerHomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final CollectionReference _userCollection =
-      FirebaseFirestore.instance.collection('users');
+  FirebaseFirestore.instance.collection('users');
   String widgetName = 'employee';
   String _firstname = '';
+  String _lastname = '' ;
 
   String _type = '';
 
   Future<void> _getdata() async {
     final user =
-        await _userCollection.doc(FirebaseAuth.instance.currentUser?.uid).get();
+    await _userCollection.doc(FirebaseAuth.instance.currentUser?.uid).get();
     setState(() {
       _firstname = user['firstname'];
+      _lastname = user['lastname'];
       _type = user['type'];
     });
   }
@@ -88,145 +90,218 @@ class _managerHomeScreenState extends State<managerHomeScreen> {
       ),
       body: Column(
         children: [
-          Container(
-            child: Card(
-              elevation: 5,
-              child: ListTile(
-                leading: Icon(Ionicons.person, size: 40),
-                title: Text(
-                  "welcome back $_firstname ",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text("$_type",
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Expanded(
-              child: GridView.count(
-            crossAxisCount: 2,
+          Expanded(child:ListView(
             children: [
               Container(
-                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                child: InkWell(
-                    onTap: () {},
-                    child: Center(
-                        child: Text('Week Schedule',
-                            style: TextStyle(
-                                height: 10,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                backgroundColor: Colors.white)))),
-                height: 190.0,
-                width: MediaQuery.of(context).size.width - 100.0,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(80),
-                    color: Colors.blue,
-                    image: DecorationImage(
-                        image: AssetImage('Assets/images/Header-1024x801.png'),
-                        fit: BoxFit.fill)),
+                child: Card(
+                  elevation: 5,
+                  child: ListTile(
+                    leading: Icon(Ionicons.person, size: 40),
+                    title: Text(
+                      "$_firstname $_lastname ",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text("$_type",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                ),
               ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                child: InkWell(
-                    onTap: () {},
-                    child: Center(
-                        child: Text('Employee List',
-                            style: TextStyle(
-                                height: 10,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                backgroundColor: Colors.white)))),
-                height: 190.0,
-                width: MediaQuery.of(context).size.width - 100.0,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(80),
-                    color: Colors.blue,
-                    image: DecorationImage(
-                        image: AssetImage(
-                            'Assets/images/iStock_000012204568_Large.jpg'),
-                        fit: BoxFit.fill)),
+              InkWell(
+                onTap: (){},
+                child: Container(
+                  width: double.infinity,
+                  height: 120,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage('https://images.unsplash.com/photo-1560420025-9453f02b4751?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=701&q=80'),
+                          fit: BoxFit.cover
+                      )
+
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'WeekSchedule',
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'view employee weekly Schedule',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                child: InkWell(
-                    onTap: () {},
-                    child: Center(
-                        child: Text('Pay Check',
-                            style: TextStyle(
-                                height: 10,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                backgroundColor: Colors.white)))),
-                height: 190.0,
-                width: MediaQuery.of(context).size.width - 100.0,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(80),
-                    color: Colors.blue,
-                    image: DecorationImage(
-                        image: AssetImage('Assets/images/paycheck.jpg'),
-                        fit: BoxFit.fill)),
+              SizedBox(
+                height: 10,
               ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                child: InkWell(
-                    onTap: () {},
-                    child: Center(
-                        child: Text('Report a problem',
-                            style: TextStyle(
-                                height: 10,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                backgroundColor: Colors.white)))),
-                height: 190.0,
-                width: MediaQuery.of(context).size.width - 100.0,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(80),
-                    color: Colors.blue,
-                    image: DecorationImage(
-                        image: AssetImage('Assets/images/phan-biet-problem-va-trouble.jpg'),
-                        fit: BoxFit.fill)),
+              InkWell(
+                onTap: (){},
+                child: Container(
+                  width: double.infinity,
+                  height: 120,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image:
+                          NetworkImage('https://images.unsplash.com/photo-1549637642-90187f64f420?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1474&q=80'),
+                          fit: BoxFit.cover
+                      )
+                  ),
+
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Employees',
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'view employees list',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ),
+              SizedBox(
+                height: 10,
+              ),
+              InkWell(
+                onTap: (){},
+                child: Container(
+                  width: double.infinity,
+                  height: 120,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image:
+                          NetworkImage('https://images.unsplash.com/photo-1600007283728-22abc97b9318?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80'),
+                          fit: BoxFit.cover
+                      )
+                  ),
+
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'PayCheck',
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'view Paycheck',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InkWell(
+                onTap: (){},
+                child: Container(
+                  width: double.infinity,
+                  height: 120,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image:
+                          NetworkImage('https://images.unsplash.com/photo-1633613286848-e6f43bbafb8d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80'),
+                          fit: BoxFit.cover
+                      )
+                  ),
+
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Problem?',
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'report a problem ',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              InkWell(
+                onTap: (){
+                  FirebaseAuth.instance.signOut();
+                  Fluttertoast.showToast(msg: "Logged Out");
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => LogIn()));
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 120,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image:
+                          NetworkImage('https://images.unsplash.com/photo-1646085401455-f659a7220028?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80'),
+                          fit: BoxFit.cover
+                      )
+                  ),
+
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                    ],
+                  ),
+                ),
+              ),
+
             ],
           )),
-          RaisedButton(
-            color: Colors.red,
-            padding: EdgeInsets.all(10),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(1),
-                  child: Icon(
-                    Ionicons.log_out_outline,
-                    color: Colors.white,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(1),
-                  child: Text(
-                    "                Log Out                  ",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
-              Fluttertoast.showToast(msg: "Logged Out");
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => LogIn()));
-            },
-          ),
-          SizedBox(
-            height: 20,
-          ),
+
         ],
       ),
     );
