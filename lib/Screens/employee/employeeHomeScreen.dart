@@ -38,7 +38,7 @@ class _employeeHomePageState extends State<employeeHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: SideDrawer(),
+      drawer: SideDrawer(widgetName),
       appBar: PreferredSize(
         child: Container(
           padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),

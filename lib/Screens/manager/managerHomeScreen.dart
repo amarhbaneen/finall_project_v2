@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:finall_project_v2/Screens/manager/employeeListView.dart';
 import 'package:finall_project_v2/Screens/employee/sidedrawer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,10 +20,10 @@ class _managerHomeScreenState extends State<managerHomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final CollectionReference _userCollection =
   FirebaseFirestore.instance.collection('users');
-  String widgetName = 'employee';
+  String widgetName = 'manager';
   String _firstname = '';
   String _lastname = '' ;
-
+  String _username = '';
   String _type = '';
 
   Future<void> _getdata() async {
@@ -32,6 +33,7 @@ class _managerHomeScreenState extends State<managerHomeScreen> {
       _firstname = user['firstname'];
       _lastname = user['lastname'];
       _type = user['type'];
+      _username = user['username'];
     });
   }
 
@@ -45,7 +47,7 @@ class _managerHomeScreenState extends State<managerHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: SideDrawer(),
+      drawer: SideDrawer(widgetName),
       appBar: PreferredSize(
         child: Container(
           padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
@@ -148,7 +150,10 @@ class _managerHomeScreenState extends State<managerHomeScreen> {
                 height: 10,
               ),
               InkWell(
-                onTap: (){},
+                onTap: (){
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => employeeListView(_username)));
+                },
                 child: Container(
                   width: double.infinity,
                   height: 120,
