@@ -24,9 +24,9 @@ class _employeeHomePageState extends State<employeeHomePage> {
   Future<String?> _getdata() async{
     final user = await _userCollection.doc(FirebaseAuth.instance.currentUser?.uid).get();
     setState(() {
-      _firstname = user['firstname'];
+      _firstname = user['firstName'];
       _type = user['type'];
-      _lastname = user['lastname'];
+      _lastname = user['lastName'];
     });}
   @override
   initState() {

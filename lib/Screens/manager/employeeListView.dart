@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finall_project_v2/Screens/employee/sidedrawer.dart';
+import 'package:finall_project_v2/Screens/manager/registerEmployeeScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+
+import 'managerHomeScreen.dart';
 
 
 class employeeListView extends StatefulWidget {
@@ -55,11 +58,18 @@ class _employeeListViewState extends State<employeeListView> {
                   color: Colors.transparent,
                 ),
                 Text(
-                  'Manager Home ',
+                  'Employee List ',
                   style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.w500,
                       color: Colors.white),
+                ),
+                GestureDetector(
+                  child: Icon( Ionicons.arrow_back, color: Colors.white  ),
+                  onTap: () {
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => managerHomeScreen()));
+                  } ,
                 )
               ],
             ),
@@ -106,14 +116,18 @@ class _employeeListViewState extends State<employeeListView> {
                                     backgroundColor: Colors.black26,
                                     foregroundColor: Colors.red,
                                     onPressed: () {
+                                      String? uid = snapshot.data?.docs[index].id.toString();
+                                      FirebaseFirestore.instance.collection('users').doc(uid).delete();
+
+
                                     },
                                   ),
                                 ),
                                 title: Text(
-                                snapshot.data?.docs[index]['firstname'],
+                                snapshot.data?.docs[index]['firstName'],
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                              subtitle: Text(snapshot.data?.docs[index]['lastname'],
+                              subtitle: Text(snapshot.data?.docs[index]['lastName'],
                                   style: TextStyle(fontWeight: FontWeight.bold)),
                             ),
                           )),
@@ -125,12 +139,18 @@ class _employeeListViewState extends State<employeeListView> {
                 : Center(
               child: CupertinoActivityIndicator(),
             ),
-            Expanded(child: FloatingActionButton(
+           FloatingActionButton(
           child: Icon(Icons.add),
           backgroundColor: Colors.black,
           foregroundColor: Colors.white,
-          onPressed: () => {},
-          ),  )
+          onPressed: ()  {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => RegistrationScreen(widget.managerName)));
+
+          },
+          ),
+            SizedBox(height: 20),
+
 
           ]);
         },

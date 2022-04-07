@@ -1,7 +1,7 @@
 import 'package:finall_project_v2/Screens/general/login.dart';
 import 'package:flutter/material.dart';
 
-import '../Home.dart';
+import '../Screens/Home.dart';
 
 class MobileScreenLayout extends StatelessWidget {
   const MobileScreenLayout({Key? key}) : super(key: key);
