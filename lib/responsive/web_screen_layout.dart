@@ -1,5 +1,7 @@
-import 'package:finall_project_v2/Screens/general/login.dart';
+
 import 'package:flutter/material.dart';
+
+import '../Screens/general/login.dart';
 
 class WebScreenLayout extends StatelessWidget {
   const WebScreenLayout({Key? key}) : super(key: key);

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finall_project_v2/Screens/manager/employeeListView.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,15 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ionicons/ionicons.dart';
-
 import '../../models/employeeModel.dart';
+import '../../utils/demensions.dart';
 import '../employee/sidedrawer.dart';
-import 'managerHomeScreen.dart';
+
 class RegistrationScreen extends StatefulWidget {
   final String managerName;
+
   RegistrationScreen(this.managerName);
-
-
 
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
@@ -24,21 +24,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _auth = FirebaseAuth.instance;
 
-  var CreatedUser ;
+  var CreatedUser;
+
 
   // string for displaying the error Message
   late String errorMessage;
 
 
-  // our form key
-  final _formKey = GlobalKey<FormState>();
-
   // editing Controller
-  final firstNameEditingController = new TextEditingController();
-  final secondNameEditingController = new TextEditingController();
-  final emailEditingController = new TextEditingController();
-  final passwordEditingController = new TextEditingController();
-  final confirmPasswordEditingController = new TextEditingController();
+  final firstNameEditingController = TextEditingController();
+  final secondNameEditingController = TextEditingController();
+  final emailEditingController = TextEditingController();
+  final passwordEditingController = TextEditingController();
+  final confirmPasswordEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -177,16 +175,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     //signup button
     final signUpButton = Material(
-      elevation: 5,
-      borderRadius: BorderRadius.circular(30),
-      color: Colors.redAccent,
+      elevation: 10,
+      borderRadius: BorderRadius.circular(100),
+      color: Colors.black,
       child: MaterialButton(
-          padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          minWidth: MediaQuery.of(context).size.width,
           onPressed: () {
             signUp(emailEditingController.text, passwordEditingController.text);
-
-
           },
           child: Text(
             "SignUp",
@@ -243,97 +237,121 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       ),
       body: Center(
         child: ListView(
-
+          padding: MediaQuery.of(context).size.width > webScreenSize  ?  EdgeInsets.symmetric(horizontal:MediaQuery.of(context).size.width/2.5): null,
           children: [
+            SizedBox(height: 32),
+            Icon(
+              Ionicons.person_add,
+              size: 35,
+            ),
+            Text(
+              'Fill the next fields to register new employee under your managment',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            ),
             SizedBox(height: 10),
-            Center(child: Icon(Ionicons.logo_ionic,
-            size: 80,),),
+            Center(child: firstNameField),
             SizedBox(height: 10),
-
-                          Center(child: firstNameField),
-                          SizedBox(height: 10),
-                          Center(child: secondNameField),
-                          SizedBox(height: 10),
-                          Center(child: emailField),
-                          SizedBox(height: 10),
-                          Center(child: passwordField),
-                          SizedBox(height: 10),
-                          Center(child: confirmPasswordField),
-                          SizedBox(height: 45),
-                          Center(child: signUpButton),
-
-
-        ],),
+            Center(child: secondNameField),
+            SizedBox(height: 10),
+            Center(child: emailField),
+            SizedBox(height: 10),
+            Center(child: passwordField),
+            SizedBox(height: 10),
+            Center(child: confirmPasswordField),
+            SizedBox(height: 45),
+            Center(child: signUpButton),
+            SizedBox(height: 100),
+            Center(
+                child: Material(
+              elevation: 10,
+              borderRadius: BorderRadius.circular(20),
+              color: Colors.black,
+              child: MaterialButton(
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) =>
+                            employeeListView(widget.managerName)));
+                  },
+                  child: Icon(
+                    Ionicons.arrow_back,
+                    color: Colors.white,
+                    size: 30,
+                  )),
+            )),
+          ],
+        ),
       ),
-
     );
   }
+
   void signUp(String email, String password) async {
-         register(email, password);
-    }
+    register(email, password);
+  }
+
   postDetailsToFirestore(createdUser) async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
-
-    employeeModel userModel = employeeModel(uid: createdUser, email: emailEditingController.text, firstName: firstNameEditingController.text, lastName: secondNameEditingController.text, type: 'employee', manager: widget.managerName);
+    employeeModel userModel = employeeModel(
+        uid: createdUser,
+        email: emailEditingController.text,
+        firstName: firstNameEditingController.text,
+        lastName: secondNameEditingController.text,
+        type: 'employee',
+        manager: widget.managerName);
 
     // writing all the values
-
 
     await firebaseFirestore
         .collection("users")
         .doc(userModel.uid)
         .set(userModel.toMap());
     Fluttertoast.showToast(msg: "Account created successfully :) ");
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => managerHomeScreen()));
-
-
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => employeeListView(widget.managerName)));
   }
-    Future<void> register(String email, String password) async {
-      FirebaseApp app = await Firebase.initializeApp(
-          name: 'Secondary', options: Firebase
-          .app()
-          .options);
 
-      var auth = FirebaseAuth.instanceFor(app: app);
-      try {
-      await auth.createUserWithEmailAndPassword(
-          email: email, password: password).then((value) =>
-      {
-        CreatedUser = auth.currentUser?.uid,
-        postDetailsToFirestore(CreatedUser)
-      }).catchError((e) {
+  Future<void> register(String email, String password) async {
+    FirebaseApp app = await Firebase.initializeApp(
+        name: 'Secondary', options: Firebase.app().options);
+
+    var auth = FirebaseAuth.instanceFor(app: app);
+    try {
+      await auth
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((value) => {
+                CreatedUser = auth.currentUser?.uid,
+                postDetailsToFirestore(CreatedUser)
+              })
+          .catchError((e) {
         Fluttertoast.showToast(msg: e.message);
       });
-    } on FirebaseAuthException catch  (error) {
-        switch (error.code) {
-          case "invalid-email":
-            errorMessage = "Your email address appears to be malformed.";
-            break;
-          case "wrong-password":
-            errorMessage = "Your password is wrong.";
-            break;
-          case "user-not-found":
-            errorMessage = "User with this email doesn't exist.";
-            break;
-          case "user-disabled":
-            errorMessage = "User with this email has been disabled.";
-            break;
-          case "too-many-requests":
-            errorMessage = "Too many requests";
-            break;
-          case "operation-not-allowed":
-            errorMessage = "Signing in with Email and Password is not enabled.";
-            break;
-          default:
-            errorMessage = "An undefined Error happened.";
-        }
-        Fluttertoast.showToast(msg: errorMessage);
+    } on FirebaseAuthException catch (error) {
+      switch (error.code) {
+        case "invalid-email":
+          errorMessage = "Your email address appears to be malformed.";
+          break;
+        case "wrong-password":
+          errorMessage = "Your password is wrong.";
+          break;
+        case "user-not-found":
+          errorMessage = "User with this email doesn't exist.";
+          break;
+        case "user-disabled":
+          errorMessage = "User with this email has been disabled.";
+          break;
+        case "too-many-requests":
+          errorMessage = "Too many requests";
+          break;
+        case "operation-not-allowed":
+          errorMessage = "Signing in with Email and Password is not enabled.";
+          break;
+        default:
+          errorMessage = "An undefined Error happened.";
+      }
+      Fluttertoast.showToast(msg: errorMessage);
 
-
-    await app.delete();
-
-  }
+      await app.delete();
+    }
   }
 }

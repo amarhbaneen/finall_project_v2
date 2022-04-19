@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../manager/employeeListView.dart';
+
 
 class SideDrawer  extends StatefulWidget {
   final String widgetName;
@@ -125,11 +127,6 @@ class _SideDrawerState extends State<SideDrawer> {
           ),
           accountEmail: Text(currentemail!),
           accountName: Text('hey $_username'),
-          currentAccountPicture: CircleAvatar(
-            backgroundColor: Colors.black,
-            backgroundImage: AssetImage(
-                "Assets/photo-1554224154-22dec7ec8818.jpeg"),
-          ),
         ),
 
         ListTile(
@@ -152,7 +149,9 @@ class _SideDrawerState extends State<SideDrawer> {
             leading: Icon(Icons.account_box),
             title: Text("employees"),
             onTap: () {
-              //Navigator//
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                      builder: (context) => employeeListView(_username)));
             }),
         ListTile(
             leading: Icon(Icons.payments_outlined),

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finall_project_v2/Screens/employee/employeeHomeScreen.dart';
+import 'package:finall_project_v2/utils/demensions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,16 +47,17 @@ class _LogInState extends State<LogIn> {
                     image: DecorationImage(
                         image:
                         NetworkImage('https://media.idownloadblog.com/wp-content/uploads/2021/01/abstract-wallpaper-for-iphone-by-WALLSBYJFL-idownloadblog-touchid.jpg'),
-                        fit: BoxFit.cover
+                        fit: MediaQuery.of(context).size.width > webScreenSize  ?
+                        BoxFit.cover : BoxFit.none
                     )
                 ),
                 height: double.infinity,
                 width: double.infinity,
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 20, left: 20),
+                  padding: MediaQuery.of(context).size.width > webScreenSize  ?  EdgeInsets.symmetric(horizontal:MediaQuery.of(context).size.width/2.5):
+                  const EdgeInsets.only(right: 20, left: 20),
                   child: SingleChildScrollView(
                     child: Column(
-
                       children: [
                         SizedBox(
                           height: 100,
