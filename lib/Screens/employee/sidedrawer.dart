@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../manager/employeeListView.dart';
+import '../manager/managerSchedule.dart';
 
 
 class SideDrawer  extends StatefulWidget {
@@ -77,7 +78,7 @@ class _SideDrawerState extends State<SideDrawer> {
         ),
 
         ListTile(
-          leading: Icon(Icons.home),
+          leading: const Icon(Icons.home),
           title: Text('Home'),
           onTap: () {
             Navigator.of(context).pushReplacement(
@@ -140,7 +141,8 @@ class _SideDrawerState extends State<SideDrawer> {
         ),
         ListTile(
           onTap: () {
-            //Navigator//
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => Schedule()));
           },
           leading: Icon(Icons.event),
           title: Text("Week Schedule"),

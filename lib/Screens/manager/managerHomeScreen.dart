@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finall_project_v2/Screens/manager/employeeListView.dart';
 import 'package:finall_project_v2/Screens/employee/sidedrawer.dart';
-import 'package:finall_project_v2/Screens/manager/payCheckManagerScreen.dart';
 import 'package:finall_project_v2/Screens/manager/paycheck/PDFVirewePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,6 +10,7 @@ import 'package:ionicons/ionicons.dart';
 
 import '../../utils/demensions.dart';
 import '../general/login.dart';
+import 'managerSchedule.dart';
 
 class managerHomeScreen extends StatefulWidget {
   const managerHomeScreen({Key? key}) : super(key: key);
@@ -26,7 +26,6 @@ class _managerHomeScreenState extends State<managerHomeScreen> {
   String widgetName = 'manager';
   String _firstname = '';
   String _lastname = '';
-
   String _username = '';
   String _type = '';
 
@@ -97,8 +96,8 @@ class _managerHomeScreenState extends State<managerHomeScreen> {
       body: Column(
         children: [
           Expanded(
-              child:MediaQuery.of(context).size.width > webScreenSize ? WebView() : ListView(
-                padding:  MediaQuery.of(context).size.width > webScreenSize  ?  EdgeInsets.symmetric(horizontal:MediaQuery.of(context).size.width/2.5):const EdgeInsets.only(right: 20, left: 20),
+              child: ListView(
+                padding:  MediaQuery.of(context).size.width > webScreenSize  ?  EdgeInsets.symmetric(horizontal:MediaQuery.of(context).size.width/3):const EdgeInsets.only(right: 20, left: 20),
             children: [
               Container(
                 child: Card(
@@ -115,7 +114,10 @@ class _managerHomeScreenState extends State<managerHomeScreen> {
                 ),
               ),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => Schedule()));
+                },
                 child: Container(
                   width: double.infinity,
                   height: 120,
@@ -318,7 +320,6 @@ class _managerHomeScreenState extends State<managerHomeScreen> {
 
   Widget WebView(){
     return Column(
-
       children: [
         Container(
           padding: EdgeInsets.symmetric(horizontal:MediaQuery.of(context).size.width/3.5),
@@ -340,40 +341,44 @@ class _managerHomeScreenState extends State<managerHomeScreen> {
            padding: EdgeInsets.symmetric(horizontal:MediaQuery.of(context).size.width/3.5),
            children: [
           InkWell(
-            onTap: () {},
-            child: Container(
-              width: double.infinity,
-              height: 120,
-              decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  image: DecorationImage(
-                      image: NetworkImage(
-                          'https://images.unsplash.com/photo-1560420025-9453f02b4751?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=701&q=80'),
-                      fit: BoxFit.cover)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'WeekSchedule',
-                    style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    'view employee weekly Schedule',
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  )
-                ],
+            onTap: () {
+              Fluttertoast.showToast(msg: "Logged Out");
+            },
+            child: IgnorePointer(
+              child: Container(
+                width: double.infinity,
+                height: 120,
+                decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.black,
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    image: DecorationImage(
+                        image: NetworkImage(
+                            'https://images.unsplash.com/photo-1560420025-9453f02b4751?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=701&q=80'),
+                        fit: BoxFit.cover)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'WeekSchedule',
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      'view employee weekly Schedule',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    )
+                  ],
+                ),
               ),
             ),
           ),

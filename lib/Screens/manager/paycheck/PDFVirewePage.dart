@@ -1,6 +1,6 @@
 
-import 'package:finall_project_v2/Screens/manager/managerHomeScreen.dart';
-import 'package:finall_project_v2/utils/firebaseApi/firebaseFile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
@@ -8,21 +8,27 @@ import '../../../utils/demensions.dart';
 import '../../../utils/firebaseApi/fireBaseApi.dart';
 import '../../employee/sidedrawer.dart';
 import 'package:intl/intl.dart';
-import 'package:open_file/open_file.dart';
+
+import '../managerHomeScreen.dart';
+
 
 
 
 class pdfViewer extends StatefulWidget {
   const pdfViewer({Key? key}) : super(key: key);
 
+
   @override
   State<pdfViewer> createState() => _pdfViewerState();
 }
 
 class _pdfViewerState extends State<pdfViewer> {
-  late Future<List<FirebaseFile>>  pdfsFiles;
+  final CollectionReference _userCollection =
+  FirebaseFirestore.instance.collection('users');
+  var pdfsFiles;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String selectedDate =DateFormat('MMM/yyyy').format(DateTime.now());
+   String id ='aa';
   String widgetName = 'manager';
   bool pickerIsExpanded = false;
   int _pickerYear = DateTime.now().year;
@@ -32,13 +38,19 @@ class _pdfViewerState extends State<pdfViewer> {
     1,
   );
 
-  dynamic _pickerOpen = true;
 
+  getData()
+  async {
+    final user =
+        await _userCollection.doc(FirebaseAuth.instance.currentUser?.uid).get();
+    setState(() {
+      id = user['id'];
+    });
+  }
 
-  initState()  {
+  initState() {
       super.initState();
-       pdfsFiles = FireBaseApi.listAll('pdfs/');
-
+      getData();
 
     }
 
@@ -56,16 +68,18 @@ class _pdfViewerState extends State<pdfViewer> {
           duration: kThemeChangeDuration,
           transitionBuilder: (Widget child, Animation<double> animation) {
             return FadeTransition(
+
               opacity: animation,
               child: child,
             );
           },
           child: TextButton(
+
             key: ValueKey(backgroundColor),
             onPressed: () {
               setState(() {
                 _selectedMonth = dateTime;
-                selectedDate = DateFormat('MMM/yyyy').format(dateTime);
+                selectedDate = DateFormat('MM/yyyy').format(dateTime);
               });
             },
             style: TextButton.styleFrom(
@@ -73,6 +87,7 @@ class _pdfViewerState extends State<pdfViewer> {
               shape: CircleBorder(),
             ),
             child: Text(
+
               DateFormat('MMM').format(dateTime),
               style: TextStyle(
                 color: Colors.white
@@ -153,72 +168,47 @@ class _pdfViewerState extends State<pdfViewer> {
           ),
           preferredSize: Size(MediaQuery.of(context).size.width, 150.0),
         ),
-      body:
+        body: Column(children:[
+          Row(
+            children: [
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    _pickerYear = _pickerYear - 1;
+                  });
+                },
+                icon: Icon(Icons.navigate_before_rounded),
+              ),
+              Expanded(
 
-          Column(children: [
-          Material(
-            color: Theme.of(context).cardColor,
-            child: AnimatedSize(
-              curve: Curves.easeInOut,
-              duration: Duration(milliseconds: 300),
-              child: Container(
-                height: _pickerOpen ? null : 0.0,
-                child: Column(
-                  children: [
-                    Row(
-
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _pickerYear = _pickerYear - 1;
-                            });
-                          },
-                          icon: Icon(Icons.navigate_before_rounded),
-                        ),
-                        Expanded(
-
-                          child: Center(
-                            child: Text(
-                              _pickerYear.toString(),
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _pickerYear = _pickerYear + 1;
-                            });
-                          },
-                          icon: Icon(Icons.navigate_next_rounded),
-                        ),
-                      ],
-                    ),
-                    ...generateMonths(),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                  ],
+                child: Center(
+                  child: Text(
+                    _pickerYear.toString(),
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
-            ),
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    _pickerYear = _pickerYear + 1;
+                  });
+                },
+                icon: Icon(Icons.navigate_next_rounded),
+              ),
+            ],
           ),
-          SizedBox(
-            height: 20.0,
-          ),
-
-          Expanded(child: listBuild()),
-
+          ...generateMonths(),
+          Expanded(child: buildList()),
           Center(child: Material(
-            elevation: 8,
+
+            elevation: 10,
             borderRadius: BorderRadius.circular(20),
             color: Colors.black,
             child: MaterialButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
                       MaterialPageRoute(builder: (context) => managerHomeScreen()));
-
                 },
                 child: Icon(
                   Ionicons.arrow_back,
@@ -226,70 +216,55 @@ class _pdfViewerState extends State<pdfViewer> {
                   size: 30,
                 )),
           )),
-            SizedBox(
-              height: 20.0,
-            ),
-          ],
-          ),
+          SizedBox(height: 20)
+        ],
+        ),
     );
   }
-  Widget listBuild() => FutureBuilder<List<FirebaseFile>>(
-        future: pdfsFiles,
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return Center(child: CircularProgressIndicator());
-            default:
-              if (snapshot.hasError) {
-                return Center(child: Text('Some error occurred!'));
-              } else {
-                final files = snapshot.data!;
 
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 12),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: files.length,
-                        itemBuilder: (context, index) {
-                          final file = files[index];
+  Widget buildList()
+  {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('paychecks')
+          .where('owneruid',isEqualTo: id)
+          .where('payCheckDate', isEqualTo: selectedDate.toString())
+          .snapshots(),
+      builder: (context, snapshot) {
+        return Column(
+            children: [
+              Expanded(
+                  child:
+                  ListView.builder(
+                    padding:MediaQuery.of(context).size.width > webScreenSize  ?  EdgeInsets.symmetric(horizontal:MediaQuery.of(context).size.width/2.5): null,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Column(children: [
+                        InkWell(
+                            onTap: () {
+                              MediaQuery.of(context).size.width > webScreenSize  ? FireBaseApi.downloadFileWeb(snapshot.data?.docs[index]['payCheckUrl'],snapshot.data?.docs[index]['owneruid']):
+                              FireBaseApi.downloadFiletoDevice(snapshot.data?.docs[index]['payCheckUrl'],snapshot.data?.docs[index]['owneruid']);
+                            },
+                            child: Card(
+                              elevation: 5,
+                              child: ListTile(
+                                leading: Icon(Ionicons.download),
+                                title:  Text('$id'),
+                                subtitle: Text('paycheck for month ${snapshot.data?.docs[index]['payCheckDate']}'),
+                              )
+                            )),
+                      ]);
+                    },
+                    itemCount: snapshot.data!.docs.length,
+                  )
+              )
 
-                          return buildFile(context, file);
-                        },
-                      ),
-                    ),
-                  ],
-                );
-              }
-          }
-        },
-  );
+            ]);
+      },
+    );
+  }
 
-  Widget buildFile(BuildContext context, FirebaseFile file) => ListTile(
-    leading: Icon(
-      Icons.download
-    ),
-    title: Text(
-      file.name,
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        decoration: TextDecoration.underline,
-        color: Colors.blue,
-      ),
-    ),
-    onTap: ()async {
-      var f ;
-      MediaQuery.of(context).size.width > webScreenSize ?
-      await FireBaseApi.downloadFileWeb(file.ref):  FireBaseApi.downloafFile(file.ref);
-
-      final snackBar = SnackBar(
-        content: Text('Downloaded ${file.name}'),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    },
-  );
 
 
 
 }
+
