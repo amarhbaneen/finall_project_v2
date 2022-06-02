@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,15 +7,10 @@ import '../../../utils/demensions.dart';
 import '../../../utils/firebaseApi/fireBaseApi.dart';
 import '../../employee/sidedrawer.dart';
 import 'package:intl/intl.dart';
-
 import '../managerHomeScreen.dart';
-
-
-
 
 class pdfViewer extends StatefulWidget {
   const pdfViewer({Key? key}) : super(key: key);
-
 
   @override
   State<pdfViewer> createState() => _pdfViewerState();
@@ -24,11 +18,11 @@ class pdfViewer extends StatefulWidget {
 
 class _pdfViewerState extends State<pdfViewer> {
   final CollectionReference _userCollection =
-  FirebaseFirestore.instance.collection('users');
+      FirebaseFirestore.instance.collection('users');
   var pdfsFiles;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  String selectedDate =DateFormat('MMM/yyyy').format(DateTime.now());
-   String id ='aa';
+  String selectedDate = DateFormat('MMM/yyyy').format(DateTime.now());
+  String id = 'aa';
   String widgetName = 'manager';
   bool pickerIsExpanded = false;
   int _pickerYear = DateTime.now().year;
@@ -38,9 +32,7 @@ class _pdfViewerState extends State<pdfViewer> {
     1,
   );
 
-
-  getData()
-  async {
+  getData() async {
     final user =
         await _userCollection.doc(FirebaseAuth.instance.currentUser?.uid).get();
     setState(() {
@@ -49,12 +41,9 @@ class _pdfViewerState extends State<pdfViewer> {
   }
 
   initState() {
-      super.initState();
-      getData();
-
-    }
-
-
+    super.initState();
+    getData();
+  }
 
   List<Widget> generateRowOfMonths(from, to) {
     List<Widget> months = [];
@@ -68,13 +57,11 @@ class _pdfViewerState extends State<pdfViewer> {
           duration: kThemeChangeDuration,
           transitionBuilder: (Widget child, Animation<double> animation) {
             return FadeTransition(
-
               opacity: animation,
               child: child,
             );
           },
           child: TextButton(
-
             key: ValueKey(backgroundColor),
             onPressed: () {
               setState(() {
@@ -87,11 +74,8 @@ class _pdfViewerState extends State<pdfViewer> {
               shape: CircleBorder(),
             ),
             child: Text(
-
               DateFormat('MMM').format(dateTime),
-              style: TextStyle(
-                color: Colors.white
-              ),
+              style: TextStyle(color: Colors.white),
             ),
           ),
         ),
@@ -103,15 +87,20 @@ class _pdfViewerState extends State<pdfViewer> {
   List<Widget> generateMonths() {
     return [
       Container(
-        padding: MediaQuery.of(context).size.width > webScreenSize  ?  EdgeInsets.symmetric(horizontal:MediaQuery.of(context).size.width/2.5):null,
+        padding: MediaQuery.of(context).size.width > webScreenSize
+            ? EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width / 2.5)
+            : null,
         child: Row(
-
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: generateRowOfMonths(1, 6),
         ),
       ),
       Container(
-        padding: MediaQuery.of(context).size.width > webScreenSize  ?  EdgeInsets.symmetric(horizontal:MediaQuery.of(context).size.width/2.5):null,
+        padding: MediaQuery.of(context).size.width > webScreenSize
+            ? EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width / 2.5)
+            : null,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: generateRowOfMonths(7, 12),
@@ -123,52 +112,53 @@ class _pdfViewerState extends State<pdfViewer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset : false,
+      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
-        drawer: SideDrawer(widgetName),
-        appBar: PreferredSize(
-          child: Container(
-            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-            child: ButtonTheme(
-              child: ButtonBar(
-                alignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  RaisedButton(
-                    onPressed: () {
-                      _scaffoldKey.currentState?.openDrawer();
-                    },
-                    child: Icon(Ionicons.menu_sharp),
-                    elevation: 0,
-                    color: Colors.transparent,
-                  ),
-                  Text(
-                    'Pay Check ',
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white),
-                  )
-                ],
-              ),
-            ),
-            decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    width: 2.0,
-                    color: Colors.white,
-                  ),
+      drawer: SideDrawer(widgetName),
+      appBar: PreferredSize(
+        child: Container(
+          padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+          child: ButtonTheme(
+            child: ButtonBar(
+              alignment: MainAxisAlignment.start,
+              children: <Widget>[
+                RaisedButton(
+                  onPressed: () {
+                    _scaffoldKey.currentState?.openDrawer();
+                  },
+                  child: Icon(Ionicons.menu_sharp),
+                  elevation: 0,
+                  color: Colors.transparent,
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black,
-                    blurRadius: 3.0,
-                    spreadRadius: 1.0,
-                  )
-                ]),
+                Text(
+                  'Pay Check ',
+                  style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
+                )
+              ],
+            ),
           ),
-          preferredSize: Size(MediaQuery.of(context).size.width, 150.0),
+          decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  width: 2.0,
+                  color: Colors.white,
+                ),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black,
+                  blurRadius: 3.0,
+                  spreadRadius: 1.0,
+                )
+              ]),
         ),
-        body: Column(children:[
+        preferredSize: Size(MediaQuery.of(context).size.width, 150.0),
+      ),
+      body: Column(
+        children: [
           Row(
             children: [
               IconButton(
@@ -180,7 +170,6 @@ class _pdfViewerState extends State<pdfViewer> {
                 icon: Icon(Icons.navigate_before_rounded),
               ),
               Expanded(
-
                 child: Center(
                   child: Text(
                     _pickerYear.toString(),
@@ -200,15 +189,15 @@ class _pdfViewerState extends State<pdfViewer> {
           ),
           ...generateMonths(),
           Expanded(child: buildList()),
-          Center(child: Material(
-
+          Center(
+              child: Material(
             elevation: 10,
             borderRadius: BorderRadius.circular(20),
             color: Colors.black,
             child: MaterialButton(
                 onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => managerHomeScreen()));
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => managerHomeScreen()));
                 },
                 child: Icon(
                   Ionicons.arrow_back,
@@ -218,53 +207,51 @@ class _pdfViewerState extends State<pdfViewer> {
           )),
           SizedBox(height: 20)
         ],
-        ),
+      ),
     );
   }
 
-  Widget buildList()
-  {
+  Widget buildList() {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('paychecks')
-          .where('owneruid',isEqualTo: id)
+          .where('owneruid', isEqualTo: id)
           .where('payCheckDate', isEqualTo: selectedDate.toString())
           .snapshots(),
       builder: (context, snapshot) {
-        return Column(
-            children: [
-              Expanded(
-                  child:
-                  ListView.builder(
-                    padding:MediaQuery.of(context).size.width > webScreenSize  ?  EdgeInsets.symmetric(horizontal:MediaQuery.of(context).size.width/2.5): null,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Column(children: [
-                        InkWell(
-                            onTap: () {
-                              MediaQuery.of(context).size.width > webScreenSize  ? FireBaseApi.downloadFileWeb(snapshot.data?.docs[index]['payCheckUrl'],snapshot.data?.docs[index]['owneruid']):
-                              FireBaseApi.downloadFiletoDevice(snapshot.data?.docs[index]['payCheckUrl'],snapshot.data?.docs[index]['owneruid']);
-                            },
-                            child: Card(
-                              elevation: 5,
-                              child: ListTile(
-                                leading: Icon(Ionicons.download),
-                                title:  Text('$id'),
-                                subtitle: Text('paycheck for month ${snapshot.data?.docs[index]['payCheckDate']}'),
-                              )
-                            )),
-                      ]);
+        return Column(children: [
+          Expanded(
+              child: ListView.builder(
+            padding: MediaQuery.of(context).size.width > webScreenSize
+                ? EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width / 2.5)
+                : null,
+            itemBuilder: (BuildContext context, int index) {
+              return Column(children: [
+                InkWell(
+                    onTap: () {
+                      MediaQuery.of(context).size.width > webScreenSize
+                          ? FireBaseApi.downloadFileWeb(
+                              snapshot.data?.docs[index]['payCheckUrl'],
+                              snapshot.data?.docs[index]['owneruid'])
+                          : FireBaseApi.downloadFiletoDevice(
+                              snapshot.data?.docs[index]['payCheckUrl'],
+                              snapshot.data?.docs[index]['owneruid']);
                     },
-                    itemCount: snapshot.data!.docs.length,
-                  )
-              )
-
-            ]);
+                    child: Card(
+                        elevation: 5,
+                        child: ListTile(
+                          leading: Icon(Ionicons.download),
+                          title: Text('$id'),
+                          subtitle: Text(
+                              'paycheck for month ${snapshot.data?.docs[index]['payCheckDate']}'),
+                        ))),
+              ]);
+            },
+            itemCount: snapshot.data!.docs.length,
+          ))
+        ]);
       },
     );
   }
-
-
-
-
 }
-
